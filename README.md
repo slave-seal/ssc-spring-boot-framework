@@ -1,0 +1,1 @@
+# ssc-spring-boot-framework
