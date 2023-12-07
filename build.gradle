@@ -4,11 +4,17 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.ssc'
-version = '0.0.1-SNAPSHOT'
+allprojects {
+    group = 'com.ssc'
+    version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = '17'
+    java {
+        sourceCompatibility = '17'
+    }
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 configurations {
@@ -16,22 +22,50 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+subprojects { subproject ->
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-repositories {
-    mavenCentral()
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    def projectName = subproject.getName()
+    if (projectName.startsWith("data")) {
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+            implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+            annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+            annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+            annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+        }
+        configurations {
+            querysl.extendsFrom compileClassPath
+        }
+    } else if (projectName.startsWith("boot")) {
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-web'
+        }
+    }
+    tasks.named('bootJar') {
+        enabled = false
+    }
+
+    tasks.named('jar') {
+        enabled = true
+    }
+
+    tasks.named('bootBuildImage') {
+        builder = 'paketobuildpacks/builder-jammy-base:latest'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder-jammy-base:latest'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}

@@ -1,1 +1,6 @@
 rootProject.name = 'ssc-spring-boot-framework'
+include 'boot:boot-admin'
+findProject(':boot:boot-admin')?.name = 'boot-admin'
+include 'data:data-user'
+findProject(':data:data-user')?.name = 'data-user'
+
