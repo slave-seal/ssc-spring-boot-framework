@@ -17,9 +17,6 @@ public class Mapper {
     }
 
     public Member to(MemberEntity entity) {
-        if (entity == null) {
-            return null;
-        }
         return Member.builder()
             .id(entity.getId())
             .build();

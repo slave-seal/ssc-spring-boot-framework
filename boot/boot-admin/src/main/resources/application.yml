@@ -5,12 +5,11 @@ server:
 
 spring:
   profiles:
-    active:
-      - local
-      - dev
-      - prod
+    active: local
+#    active: dev
+#    active: prod
     group:
-      local: local-db,
+      local: local-db
       dev: dev-db
       prod: prod-db
     include: db

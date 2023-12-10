@@ -1,8 +1,6 @@
 package com.ssc.service;
 
-import com.ssc.dto.Member;
-import com.ssc.port.EntityPort;
-import java.util.UUID;
+import com.ssc.port.UserDataPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +8,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final EntityPort<Member, UUID> entityPort;
+    private final UserDataPort userDataPort;
 
 }

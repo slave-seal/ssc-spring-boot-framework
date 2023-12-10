@@ -22,20 +22,19 @@ import org.hibernate.annotations.Where;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "deletedOn = false")
-@Table(name = "members")
-@SQLDelete(sql = "UPDATE members SET deleted_on = 1 WHERE id = ?")
-public class MemberEntity extends BaseEntity {
+@Where(clause = "deleted_on = false")
+@Table(name = "auths")
+@SQLDelete(sql = "UPDATE auths SET deleted_on = 1 WHERE id = ?")
+public class AuthEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String email;
-    private String name;
-    private String password;
+    private String code;
+    private String value;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "auth")
     private List<MemberAuthEntity> memberAuths;
 
 }

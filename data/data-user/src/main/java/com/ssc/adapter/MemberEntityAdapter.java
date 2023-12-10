@@ -2,35 +2,38 @@ package com.ssc.adapter;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.ssc.dto.Member;
+import com.ssc.entity.MemberEntity;
 import com.ssc.mapper.Mapper;
-import com.ssc.port.EntityPort;
+import com.ssc.port.UserDataPort;
 import com.ssc.repository.MemberRepository;
+import com.ssc.repository.QueryRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-@Repository
+@org.springframework.stereotype.Repository
 @RequiredArgsConstructor
-public class MemberEntityAdapter implements EntityPort<Member, UUID> {
+public class MemberEntityAdapter implements UserDataPort {
 
     private final MemberRepository memberRepository;
+    private final QueryRepository<MemberEntity> queryRepository;
 
     @Override
-    public Optional<Member> findById(UUID id) {
-        return Optional.ofNullable(Mapper.to(memberRepository.findById(id).orElse(null)));
+    public Member findById(UUID id) {
+        MemberEntity entity = memberRepository.findById(id).orElseThrow();
+        return Mapper.to(entity);
     }
 
     @Override
-    public Optional<Member> findOne(BooleanExpression... expressions) {
-        return Optional.ofNullable(Mapper.to(memberRepository.findOne()));
+    public Member findOne(BooleanExpression... expressions) {
+        MemberEntity entity = queryRepository.queryOne(expressions).orElseThrow();
+        return Mapper.to(entity);
     }
 
     @Override
     public List<Member> findAll(BooleanExpression... expressions) {
-        return memberRepository.findAll()
+        return queryRepository.findAll(expressions)
             .stream()
             .map(Mapper::to)
             .collect(Collectors.toList());
@@ -49,5 +52,10 @@ public class MemberEntityAdapter implements EntityPort<Member, UUID> {
     @Override
     public void delete(UUID id) {
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public void delete(Member deleteTarget) {
+
     }
 }

@@ -43,6 +43,8 @@ subprojects { subproject ->
             annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
             annotationProcessor "jakarta.annotation:jakarta.annotation-api"
             annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+            implementation project(':util:util-data')
         }
         configurations {
             querysl.extendsFrom compileClassPath
@@ -50,6 +52,8 @@ subprojects { subproject ->
     } else if (projectName.startsWith("boot")) {
         dependencies {
             implementation 'org.springframework.boot:spring-boot-starter-web'
+
+            implementation project(':util:util-boot')
         }
     }
     tasks.named('bootJar') {
