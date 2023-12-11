@@ -7,5 +7,8 @@ tasks.named('jar') {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.1.6'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    implementation 'org.springframework.security:spring-security-core:6.1.5'
     implementation project(':data:data-user')
 }

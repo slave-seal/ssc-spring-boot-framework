@@ -9,4 +9,7 @@ import lombok.Getter;
 public class Member {
 
     private UUID id;
+    private String userName;
+    private String password;
+
 }
